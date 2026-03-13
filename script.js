@@ -145,8 +145,9 @@ function loadAvailableTasks() {
     const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
     const tasks = JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
     
+    // 1. Filter the tasks using the Number() safety net
     const availableTasks = tasks.filter(task => 
-        task.posterId !== currentUser.id && 
+        Number(task.posterId) !== Number(currentUser.id) && 
         !currentUser.acceptedTasks.includes(task.id) &&
         !task.completed &&
         !task.acceptedBy
@@ -155,6 +156,7 @@ function loadAvailableTasks() {
     const container = document.getElementById('tasks-container');
     container.innerHTML = '';
 
+    // 2. Check if we found anything
     if (availableTasks.length === 0) {
         document.getElementById('no-tasks-message').style.display = 'block';
         return;
@@ -162,9 +164,11 @@ function loadAvailableTasks() {
 
     document.getElementById('no-tasks-message').style.display = 'none';
     
+    // 3. Create the cards for the tasks we found
     availableTasks.forEach(task => {
         const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-        const posterUser = users.find(u => u.id === task.posterId);
+        // Use Number() here too just to be safe!
+        const posterUser = users.find(u => Number(u.id) === Number(task.posterId));
         
         if (posterUser) {
             const card = createTaskCard(task, posterUser, 'accept');

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Sign Up Page -->
+    <div id="signup-page" class="page active">
+        <div class="auth-container">
+            <h1>Sign Up</h1>
+            <form id="signup-form">
+                <input type="text" id="signup-name" placeholder="Full Name" required>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <select id="signup-gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="number" id="signup-age" placeholder="Age" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="switchPage('login-page')">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page">
+        <div class="auth-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="switchPage('signup-page')">Sign Up</a></p>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page">
+        <div class="navbar">
+            <div class="navbar-brand">📋 Task Marketplace</div>
+            <div class="navbar-menu">
+                <button class="nav-btn" onclick="loadDashboard()">📊 Dashboard</button>
+                <button class="nav-btn" onclick="loadAvailableTasks()">🔍 Available Tasks</button>
+                <button class="nav-btn" onclick="loadMyTasks()">📝 My Tasks</button>
+                <button class="nav-btn" onclick="loadAcceptedTasks()">✅ Accepted Tasks</button>
+                <button class="nav-btn" onclick="showPostTaskForm()">➕ Post Task</button>
+                <button class="nav-btn" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div class="dashboard-header">
+                    <h2>Welcome, <span id="user-name"></span>! 👋</h2>
+                    <div class="points-card">
+                        <div class="points-icon">⭐</div>
+                        <div class="points-info">
+                            <div class="points-label">Your Points</div>
+                            <div class="points-value" id="points-display">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-title">Available Tasks</div>
+                        <div class="stat-count" id="available-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-title">Accepted Tasks</div>
+                        <div class="stat-count" id="accepted-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-title">My Tasks</div>
+                        <div class="stat-count" id="my-tasks-count">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Tasks Section -->
+            <div id="available-tasks-section" class="content-section">
+                <h2>Available Tasks 🔍</h2>
+                <div id="no-tasks-message" class="no-data-message">
+                    No tasks available right now. Check back later! 😊
+                </div>
+                <div id="tasks-container" class="tasks-container"></div>
+            </div>
+
+            <!-- My Tasks Section -->
+            <div id="my-tasks-section" class="content-section">
+                <h2>My Tasks 📝</h2>
+                <div id="no-my-tasks-message" class="no-data-message">
+                    You haven't posted any tasks yet. <a href="#" onclick="showPostTaskForm()">Post your first task!</a>
+                </div>
+                <div id="my-tasks-container" class="tasks-container"></div>
+            </div>
+
+            <!-- Accepted Tasks Section -->
+            <div id="accepted-tasks-section" class="content-section">
+                <h2>Accepted Tasks ✅</h2>
+                <div id="no-accepted-tasks-message" class="no-data-message">
+                    You haven't accepted any tasks yet. Browse available tasks to get started! 🚀
+                </div>
+                <div id="accepted-tasks-container" class="tasks-container"></div>
+            </div>
+
+            <!-- Post Task Section -->
+            <div id="post-task-section" class="content-section">
+                <div class="form-container">
+                    <h2>Post a New Task ➕</h2>
+                    <form id="post-task-form">
+                        <div class="form-group">
+                            <label for="task-title">Task Title</label>
+                            <input type="text" id="task-title" placeholder="e.g., Math Homework Help" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-description">Description</label>
+                            <textarea id="task-description" placeholder="Describe your task in detail..." rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-price">Points Offered</label>
+                            <input type="number" id="task-price" placeholder="e.g., 50" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-whatsapp">WhatsApp Number</label>
+                            <input type="tel" id="task-whatsapp" placeholder="e.g., +1234567890" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-large">Post Task</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-task-title"></h2>
+            <p id="modal-task-description"></p>
+            
+            <div class="modal-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Posted by:</span>
+                    <span id="modal-task-poster"></span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Points:</span>
+                    <span id="modal-task-points" class="points-highlight"></span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <a id="modal-whatsapp-link" href="#" class="btn btn-whatsapp" target="_blank">💬 Message on WhatsApp</a>
+                <button id="modal-action-btn" class="btn btn-success hidden" onclick="acceptTaskFromModal()">Accept Task</button>
+                <button id="modal-complete-btn" class="btn btn-success hidden" onclick="completeTaskFromModal()">✅ Mark Complete</button>
+                <button id="modal-delete-btn" class="btn btn-danger hidden" onclick="deleteTaskFromModal()">🗑️ Delete Task</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
